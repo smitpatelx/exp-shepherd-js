@@ -1,62 +1,48 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="w-full grid grid-cols-3">
+    <div class="col-span-1">
+      <button 
+        class="bg-blue-500 text-white py-2 px-4 rounded shadow"
+        data-v-step="1"
+      >
+        Add +
+      </button>
+    </div>
+    <div class="col-span-1">
+      <button 
+        class="bg-blue-500 text-white py-2 px-4 rounded shadow"
+        data-v-step="2"
+      >
+        Del -
+      </button>
+    </div>
+    <div class="col-span-1 relative">
+      <button 
+        class="bg-blue-500 text-white py-2 px-4 rounded shadow"
+        data-v-step="3"
+        @click="open=!open"
+      >
+        Edit
+      </button>
+      <!-- Dialog Start -->
+      <div v-if="open" class="w-full max-w-sm bg-gray-100 py-4 px-6 space-y-3 flex flex-wrap items-center justify-center absolute top-full mt-2 left-0 shadow-lg">
+        <input data-v-step="4" type="text" placeholder="First Name" class="w-full bg-gray-200 rounded py-2 px-4">
+        <input data-v-step="5" type="text" placeholder="Last Name" class="w-full bg-gray-200 rounded py-2 px-4">
+      </div>
+      <!-- Dialog End -->
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-
-export default Vue.extend({
-  name: 'HelloWorld',
+export default {
   props: {
     msg: String,
   },
-});
+  data() {
+    return {
+      open: false,
+    }
+  }
+};
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
