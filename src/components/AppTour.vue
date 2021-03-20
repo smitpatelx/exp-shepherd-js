@@ -1,5 +1,6 @@
 <template></template>
 <script>
+import Shepherd from 'shepherd.js'
 export default {
   data() {
     return {
@@ -27,22 +28,26 @@ export default {
           },
           title: "This is a title 3",
           text: "Test",
-          buttons: [
-            { 
-              label: "Next", 
-              text: "Next", 
-              action() { 
-                if (!document.querySelector('[data-v-step="4"]')) {
-                  document.querySelector('[data-v-step="3"]').click()
-                  setTimeout(()=>{
-                    this.next()
-                  }, 100)
-                } else {
-                  this.next()
-                }
-              } 
-            }
-          ]
+          advanceOn: { 
+            selector: '[data-v-step="3"]',
+            event: 'click'
+          },
+          // buttons: [
+          //   { 
+          //     label: "Next", 
+          //     text: "Next", 
+          //     action() { 
+          //       if (!document.querySelector('[data-v-step="4"]')) {
+          //         document.querySelector('[data-v-step="3"]').click()
+          //         setTimeout(()=>{
+          //           this.next()
+          //         }, 100)
+          //       } else {
+          //         this.next()
+          //       }
+          //     } 
+          //   }
+          // ]
         },
         {
           attachTo: {
@@ -76,7 +81,6 @@ export default {
       const finish_btn = { label: "Finish", text: "Finish", action() { return this.cancel() } };
 
       return this.steps.map((val, i) => {
-        // if (val.buttons?.length > 0) return val
         if (i === 0) {
           buttons.push(...[skip_btn, next_btn])
         } else if (i === this.steps.length - 1) {
@@ -85,16 +89,31 @@ export default {
           buttons.push(...[skip_btn, pre_btn, next_btn])
         }
         
-        if (val.buttons?.length > 0) {
-          val.buttons.forEach((val2) => {
-            const idx = buttons.findIndex(item => item.text === val2.text);
-            val.buttons = [...buttons.slice(0, idx), val2, ...buttons.slice(idx + 1)];
-          })
-          buttons = [];
-          return val;
+        // if (val.buttons?.length > 0) {
+        //   val.buttons.forEach((val2) => {
+        //     const idx = buttons.findIndex(item => item.text === val2.text);
+        //     if (!val.advanceOn) {
+        //       val.buttons = [...buttons.slice(0, idx), val2, ...buttons.slice(idx + 1)];
+        //     } else {
+        //       val.buttons = [...buttons.slice(0, idx), val2, ...buttons.slice(idx + 1)];
+        //     }
+        //   })
+        //   buttons = [];
+        //   return val;
+        // }
+        
+        const arrayRemove = (arr, value)=>{ 
+          return arr.filter(function(ele){ 
+            return ele.label != value.label; 
+          });
         }
 
-        val.buttons = buttons;
+        if (typeof val.advanceOn === 'undefined') {
+          val.buttons = buttons;
+        } else {
+          val.buttons = arrayRemove(buttons, next_btn);
+        }
+
         buttons = [];
         return val;
       })
@@ -103,15 +122,27 @@ export default {
 
   created() {
     this.$nextTick(() => {
-      const tour = this.$shepherd({
+      const tour = this.$shepherd_t({
         useModalOverlay: true,
-      });
+      }); 
 
-      tour.addSteps(this.compSteps).on('before-show', ()=>{
-        if(typeof Shepherd.activeTour.next() !== 'undefined') {
-          this.next()
-        }
-      })
+      // tour.on('show', ()=>{
+      //   const currentStep = Shepherd.activeTour.steps.indexOf(Shepherd.activeTour.currentStep);
+      //   const current = this.steps[currentStep + 1]
+      //   const next = this.steps[currentStep + 2]
+
+      //   console.log(document.querySelector(next.attachTo.element))
+      //   if (!document.querySelector(next.attachTo.element)) {
+      //     document.querySelector(current.attachTo.element).click()
+      //     setTimeout(()=>{
+      //       tour.next()
+      //     }, 100)
+      //   } else {
+      //     tour.next()
+      //   }
+      // });
+
+      tour.addSteps(this.compSteps)
       tour.start();
     });
   },
